@@ -18,62 +18,75 @@ font-family:Arial,sans-serif;
 }
 
 body{
+background:
+linear-gradient(
+135deg,
+#0f1115,
+#171a21,
+#0f1115
+);
 height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-background:linear-gradient(135deg,#0d6efd,#ff7b00);
+font-family:'Segoe UI',sans-serif;
 }
 
 .login-box{
-background:white;
-padding:40px;
-border-radius:15px;
-width:100%;
-max-width:400px;
-box-shadow:0 5px 20px rgba(0,0,0,.2);
+width:450px;
+padding:50px;
+background:rgba(23,26,33,.95);
+backdrop-filter:blur(15px);
+border:1px solid #2a2f3a;
+border-radius:25px;
+box-shadow:0 20px 50px rgba(0,0,0,.5);
 }
 
 .logo{
 text-align:center;
-font-size:28px;
-font-weight:bold;
-color:#0d6efd;
-margin-bottom:10px;
+margin-bottom:35px;
 }
 
-.subtitulo{
-text-align:center;
-color:#666;
-margin-bottom:30px;
+.logo h1{
+color:white;
+font-size:38px;
 }
 
-.form-group{
-margin-bottom:15px;
+.logo p{
+color:#9ca3af;
+margin-top:8px;
 }
 
 label{
 display:block;
-margin-bottom:5px;
-font-weight:bold;
+margin-bottom:8px;
+color:white;
+font-weight:600;
 }
 
 input{
 width:100%;
-padding:12px;
-border:1px solid #ccc;
-border-radius:8px;
-font-size:15px;
+padding:15px;
+background:#0f1115;
+border:1px solid #2a2f3a;
+border-radius:12px;
+color:white;
+margin-bottom:20px;
+}
+
+input:focus{
+outline:none;
+border-color:#0d6efd;
 }
 
 button{
 width:100%;
-padding:14px;
-border:none;
-border-radius:8px;
+padding:16px;
 background:#0d6efd;
+border:none;
+border-radius:12px;
 color:white;
-font-size:16px;
+font-size:18px;
 font-weight:bold;
 cursor:pointer;
 }
@@ -81,15 +94,6 @@ cursor:pointer;
 button:hover{
 opacity:.9;
 }
-
-.erro{
-margin-top:15px;
-text-align:center;
-color:red;
-font-weight:bold;
-display:none;
-}
-
 </style>
 </head>
 <body>
