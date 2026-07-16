@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Painel Administrativo - Encanto Kids Infláveis</title>
+
+<link rel="icon" type="image/png" href="favicon.png">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#0d6efd,#ff7b00);
+}
+
+.login-box{
+background:white;
+padding:40px;
+border-radius:15px;
+width:100%;
+max-width:400px;
+box-shadow:0 10px 25px rgba(0,0,0,.2);
+}
+
+.logo{
+text-align:center;
+font-size:28px;
+font-weight:bold;
+color:#0d6efd;
+margin-bottom:10px;
+}
+
+.subtitulo{
+text-align:center;
+color:#666;
+margin-bottom:30px;
+}
+
+input{
+width:100%;
+padding:14px;
+margin-bottom:15px;
+border:1px solid #ddd;
+border-radius:8px;
+font-size:15px;
+}
+
+button{
+width:100%;
+padding:15px;
+background:#ff7b00;
+color:white;
+border:none;
+border-radius:8px;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+}
+
+button:hover{
+opacity:.9;
+}
+
+.erro{
+margin-top:15px;
+text-align:center;
+color:red;
+font-weight:bold;
+display:none;
+}
+
+</style>
+</head>
+<body>
+
+<div class="login-box">
+
+<div class="logo">
+🎈 Encanto Kids Infláveis
+</div>
+
+<div class="subtitulo">
+Painel Administrativo
+</div>
+
+<input
+type="text"
+id="usuario"
+placeholder="Usuário">
+
+<input
+type="password"
+id="senha"
+placeholder="Senha">
+
+<button onclick="login()">
+Entrar
+</button>
+
+<div id="erro" class="erro">
+Usuário ou senha incorretos.
+</div>
+
+</div>
+
+<script>
+
+function login(){
+
+const usuario =
+document.getElementById('usuario').value;
+
+const senha =
+document.getElementById('senha').value;
+
+if(
+usuario === 'vinnysouza' &&
+senha === 'admin1'
+){
+
+localStorage.setItem(
+'adminLogado',
+'true'
+);
+
+window.location.href =
+'painel.html';
+
+}else{
+
+document.getElementById('erro').style.display =
+'block';
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
