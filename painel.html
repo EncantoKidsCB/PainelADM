@@ -121,6 +121,14 @@ if(localStorage.getItem('adminLogado') !== 'true'){
 window.location.href='admin.html';
 }
 
+function logout(){
+
+localStorage.removeItem('adminLogado');
+
+window.location.href='admin.html';
+
+}
+
 </script>
 
 <header>
@@ -139,7 +147,7 @@ window.location.href='admin.html';
 
 <div class="titulo">
 <h1>Painel Administrativo</h1>
-<p>Gerencie contratos, clientes e reservas.</p>
+<p>Gerencie contratos e reservas da Encanto Kids Infláveis.</p>
 </div>
 
 <div class="cards">
@@ -147,48 +155,38 @@ window.location.href='admin.html';
 <a href="contrato.html" class="card">
 <div class="icone">📄</div>
 <h3>Gerar Contrato</h3>
-<p>Criar um novo contrato para clientes.</p>
+<p>Criar novo contrato para clientes.</p>
 </a>
 
-<a href="#" class="card">
+<div class="card">
 <div class="icone">👥</div>
 <h3>Clientes</h3>
-<p>Área em desenvolvimento.</p>
-</a>
+<p>Em desenvolvimento.</p>
+</div>
 
-<a href="#" class="card">
+<div class="card">
 <div class="icone">📋</div>
 <h3>Contratos Salvos</h3>
-<p>Área em desenvolvimento.</p>
-</a>
+<p>Em desenvolvimento.</p>
+</div>
 
-<a href="#" class="card">
+<div class="card">
 <div class="icone">⚙️</div>
 <h3>Configurações</h3>
-<p>Área em desenvolvimento.</p>
-</a>
+<p>Em desenvolvimento.</p>
+</div>
 
 </div>
 
 <div class="sair">
+
 <button class="btn-sair" onclick="logout()">
 🚪 Sair
 </button>
-</div>
 
 </div>
 
-<script>
-
-function logout(){
-
-localStorage.removeItem('adminLogado');
-
-window.location.href='admin.html';
-
-}
-
-</script>
+</div>
 
 </body>
 </html>
