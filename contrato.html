@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Gerador de Contrato - Encanto Kids Infláveis</title>
+<title>Gerador de Contratos - Encanto Kids Infláveis</title>
 
-<link rel="icon" type="image/png" href="favicon.png">
+<link rel="icon" href="favicon.png">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
 
@@ -14,164 +18,432 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,sans-serif;
+font-family:'Segoe UI',sans-serif;
 }
 
 body{
-background:#f4f6f9;
-padding:20px;
+background:#0f1115;
+color:white;
+padding:30px;
 }
 
 .container{
-max-width:1000px;
+max-width:1100px;
 margin:auto;
-background:white;
-padding:30px;
-border-radius:15px;
-box-shadow:0 5px 15px rgba(0,0,0,.1);
+background:#171a21;
+padding:40px;
+border-radius:20px;
+border:1px solid #252932;
+box-shadow:0 0 30px rgba(0,0,0,.5);
 }
 
-h1{
+.topo{
 text-align:center;
-color:#0d6efd;
+margin-bottom:40px;
+}
+
+.topo h1{
+font-size:42px;
+color:white;
 margin-bottom:10px;
 }
 
-.subtitulo{
-text-align:center;
-color:#666;
-margin-bottom:30px;
+.topo p{
+color:#9ca3af;
+font-size:18px;
+}
+
+.secao{
+margin-bottom:35px;
+}
+
+.secao h2{
+color:#0d6efd;
+margin-bottom:20px;
+font-size:28px;
 }
 
 .form-group{
-margin-bottom:15px;
+margin-bottom:18px;
 }
 
 label{
 display:block;
-margin-bottom:5px;
-font-weight:bold;
+margin-bottom:8px;
+font-weight:600;
 }
 
-input{
+input,
+textarea,
+select{
 width:100%;
-padding:12px;
-border:1px solid #ccc;
-border-radius:8px;
+padding:14px;
+background:#0f1115;
+color:white;
+border:1px solid #2a2f3a;
+border-radius:10px;
+font-size:15px;
 }
 
-h2{
-margin-top:30px;
+input:focus,
+textarea:focus{
+outline:none;
+border-color:#0d6efd;
+}
+
+textarea{
+resize:none;
+height:120px;
+}
+
+.brinquedo{
+background:#0f1115;
+border:1px solid #2a2f3a;
+padding:18px;
+border-radius:12px;
 margin-bottom:15px;
-color:#ff7b00;
-}
-
-.brinquedos{
-display:grid;
-gap:10px;
-}
-
-.item{
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:12px;
-background:#f8f8f8;
-border-radius:8px;
 }
 
-.item label{
-margin:0;
-font-weight:bold;
+.brinquedo:hover{
+border-color:#0d6efd;
 }
 
-.total{
+.total-box{
 margin-top:20px;
-padding:15px;
-background:#0d6efd;
-color:white;
-font-size:22px;
-font-weight:bold;
-text-align:center;
-border-radius:10px;
+background:#0f1115;
+padding:20px;
+border-radius:12px;
+border:1px solid #2a2f3a;
 }
 
-.assinatura-box{
-margin-top:20px;
-border:2px dashed #999;
-border-radius:10px;
-padding:10px;
-text-align:center;
+.total-box h3{
+font-size:28px;
+color:#00d26a;
 }
 
-#assinatura{
-border:1px solid #ccc;
-border-radius:10px;
+canvas{
 width:100%;
-height:250px;
-touch-action:none;
+max-width:700px;
 background:white;
+border-radius:10px;
+margin-top:10px;
 }
 
 .botoes{
-margin-top:25px;
-display:flex;
-flex-wrap:wrap;
-gap:10px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:15px;
+margin-top:30px;
 }
 
 .btn{
-flex:1;
-padding:15px;
+padding:16px;
 border:none;
 border-radius:10px;
 font-size:16px;
 font-weight:bold;
 cursor:pointer;
+transition:.3s;
 }
 
-.btn-limpar{
-background:#ffc107;
+.btn:hover{
+transform:translateY(-2px);
 }
 
-.btn-gerar{
-background:#198754;
+.btn-pdf{
+background:#0d6efd;
 color:white;
 }
 
-.btn-voltar{
+.btn-whats{
+background:#25D366;
+color:white;
+}
+
+.btn-limpar{
 background:#dc3545;
 color:white;
 }
 
-.empresa{
-margin-top:30px;
-padding:20px;
-background:#f8f8f8;
-border-radius:10px;
-text-align:center;
-}
-
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 </head>
-<body>
 
 <script>
 
-if(localStorage.getItem('adminLogado') !== 'true'){
-window.location.href='admin.html';
+let total = 0;
+
+function calcularTotal(){
+
+total = 0;
+
+document.querySelectorAll(".item").forEach(item=>{
+
+if(item.checked){
+total += parseFloat(item.value);
+}
+
+});
+
+document.getElementById("total").innerHTML =
+"R$ " + total.toFixed(2).replace(".",",");
+
+}
+
+/* ASSINATURA */
+
+const canvas = document.getElementById("assinatura");
+const ctx = canvas.getContext("2d");
+
+let desenhando = false;
+
+canvas.addEventListener("mousedown", iniciar);
+canvas.addEventListener("mouseup", parar);
+canvas.addEventListener("mousemove", desenhar);
+
+canvas.addEventListener("touchstart", iniciarTouch);
+canvas.addEventListener("touchend", parar);
+canvas.addEventListener("touchmove", desenharTouch);
+
+function iniciar(){
+desenhando = true;
+}
+
+function parar(){
+desenhando = false;
+ctx.beginPath();
+}
+
+function desenhar(e){
+
+if(!desenhando) return;
+
+ctx.lineWidth = 2;
+ctx.lineCap = "round";
+ctx.strokeStyle = "#000";
+
+ctx.lineTo(e.offsetX,e.offsetY);
+ctx.stroke();
+
+ctx.beginPath();
+ctx.moveTo(e.offsetX,e.offsetY);
+
+}
+
+function iniciarTouch(e){
+desenhando = true;
+}
+
+function desenharTouch(e){
+
+if(!desenhando) return;
+
+const rect = canvas.getBoundingClientRect();
+
+const x = e.touches[0].clientX - rect.left;
+const y = e.touches[0].clientY - rect.top;
+
+ctx.lineWidth = 2;
+ctx.lineCap = "round";
+ctx.strokeStyle = "#000";
+
+ctx.lineTo(x,y);
+ctx.stroke();
+
+ctx.beginPath();
+ctx.moveTo(x,y);
+
+e.preventDefault();
+
+}
+
+function limparAssinatura(){
+
+ctx.clearRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+}
+
+/* PDF */
+
+async function gerarPDF(){
+
+const { jsPDF } = window.jspdf;
+
+const pdf = new jsPDF();
+
+const nome =
+document.getElementById("nome").value;
+
+const cpf =
+document.getElementById("cpf").value;
+
+const telefone =
+document.getElementById("telefone").value;
+
+const endereco =
+document.getElementById("endereco").value;
+
+const cidade =
+document.getElementById("cidade").value;
+
+const dataEvento =
+document.getElementById("dataEvento").value;
+
+const observacoes =
+document.getElementById("observacoes").value;
+
+pdf.setFontSize(18);
+
+pdf.text(
+"CONTRATO DE LOCAÇÃO",
+20,
+20
+);
+
+pdf.setFontSize(12);
+
+pdf.text(
+"Encanto Kids Infláveis",
+20,
+35
+);
+
+pdf.text(
+"Cliente: " + nome,
+20,
+55
+);
+
+pdf.text(
+"CPF: " + cpf,
+20,
+65
+);
+
+pdf.text(
+"Telefone: " + telefone,
+20,
+75
+);
+
+pdf.text(
+"Endereço: " + endereco,
+20,
+85
+);
+
+pdf.text(
+"Cidade: " + cidade,
+20,
+95
+);
+
+pdf.text(
+"Data do Evento: " + dataEvento,
+20,
+105
+);
+
+pdf.text(
+"Valor Total: R$ " +
+total.toFixed(2),
+20,
+115
+);
+
+pdf.text(
+"Observações:",
+20,
+130
+);
+
+pdf.text(
+observacoes || "-",
+20,
+140
+);
+
+const assinaturaImagem =
+canvas.toDataURL();
+
+pdf.addImage(
+assinaturaImagem,
+"PNG",
+20,
+170,
+80,
+30
+);
+
+pdf.text(
+"Assinatura do Cliente",
+20,
+205
+);
+
+pdf.save(
+"Contrato_EncantoKids.pdf"
+);
+
+}
+
+/* WHATSAPP */
+
+function enviarWhatsApp(){
+
+const nome =
+document.getElementById("nome").value;
+
+const telefone =
+document.getElementById("telefone").value;
+
+const mensagem =
+`Olá ${nome},
+
+Segue seu contrato da Encanto Kids Infláveis.
+
+Valor Total: R$ ${total.toFixed(2)}
+
+Obrigado pela preferência!`;
+
+window.open(
+
+`https://wa.me/55${telefone.replace(/\D/g,'')}?text=${encodeURIComponent(mensagem)}`,
+
+"_blank"
+
+);
+
 }
 
 </script>
 
+</body>
+</html>
+    
+<body>
+
 <div class="container">
 
-<h1>📄 Gerador de Contrato</h1>
+<div class="topo">
 
-<div class="subtitulo">
-Encanto Kids Infláveis
+<h1>📄 Gerador de Contratos</h1>
+
+<p>
+Encanto Kids Infláveis • Sistema Administrativo
+</p>
+
 </div>
+
+<div class="secao">
 
 <h2>Dados do Cliente</h2>
 
@@ -205,325 +477,121 @@ Encanto Kids Infláveis
 <input type="date" id="dataEvento">
 </div>
 
+</div>
+<div class="secao">
+
 <h2>Brinquedos</h2>
 
-<div class="brinquedos">
+<div class="brinquedo">
 
-<div class="item">
-<label>
-<input type="checkbox"
+<div>
+<h3>🎈 Pula-Pula Premium</h3>
+<p>R$ 149,99</p>
+</div>
+
+<input
+type="checkbox"
 value="149.99"
+class="item"
 onchange="calcularTotal()">
-🎈 Pula-Pula Premium
-</label>
 
-<span>R$ 149,99</span>
 </div>
 
-<div class="item">
-<label>
-<input type="checkbox"
+<div class="brinquedo">
+
+<div>
+<h3>🏰 Castelo Inflável</h3>
+<p>R$ 149,99</p>
+</div>
+
+<input
+type="checkbox"
 value="149.99"
+class="item"
 onchange="calcularTotal()">
-🛝 Tobogã Inflável Premium
-</label>
 
-<span>R$ 149,99</span>
 </div>
 
-<div class="item">
-<label>
-<input type="checkbox"
+<div class="brinquedo">
+
+<div>
+<h3>🛝 Tobogã Inflável</h3>
+<p>R$ 149,99</p>
+</div>
+
+<input
+type="checkbox"
 value="149.99"
+class="item"
 onchange="calcularTotal()">
-🏰 Castelo com Piscina de Bolinhas Premium
-</label>
 
-<span>R$ 149,99</span>
+</div>
+
+<div class="total-box">
+
+<p>Total da Reserva</p>
+
+<h3 id="total">
+R$ 0,00
+</h3>
+
 </div>
 
 </div>
 
-<div class="total">
-Total: R$ <span id="valorTotal">0,00</span>
+<div class="secao">
+
+<h2>Observações</h2>
+
+<textarea
+id="observacoes"
+placeholder="Digite observações adicionais do contrato..."></textarea>
+
 </div>
+
+<div class="secao">
 
 <h2>Assinatura do Cliente</h2>
 
-<div class="assinatura-box">
+<p style="color:#9ca3af;margin-bottom:10px;">
+Assine dentro da área abaixo:
+</p>
 
-<canvas id="assinatura"></canvas>
+<canvas
+id="assinatura"
+width="700"
+height="220">
+</canvas>
 
-</div>
-<div class="botoes">
+<br><br>
 
-<button class="btn btn-limpar"
+<button
+type="button"
+class="btn btn-limpar"
 onclick="limparAssinatura()">
 🧹 Limpar Assinatura
 </button>
 
-<button class="btn btn-gerar"
-onclick="gerarContrato()">
-📄 Gerar Contrato
+</div>
+
+<div class="botoes">
+
+<button
+class="btn btn-pdf"
+onclick="gerarPDF()">
+
+📄 Gerar PDF
+
 </button>
 
-<button class="btn btn-voltar"
-onclick="window.location.href='painel.html'">
-⬅️ Voltar ao Painel
+<button
+class="btn btn-whats"
+onclick="enviarWhatsApp()">
+
+📲 Enviar WhatsApp
+
 </button>
 
 </div>
 
-<div class="empresa">
-
-<h3>Encanto Kids Infláveis</h3>
-
-<p>Responsável: Vinicius Gabriel de Souza</p>
-
 </div>
-
-</div>
-
-<script>
-
-function calcularTotal(){
-
-let total = 0;
-
-document
-.querySelectorAll('input[type="checkbox"]')
-.forEach(item => {
-
-if(item.checked){
-total += parseFloat(item.value);
-}
-
-});
-
-document.getElementById('valorTotal').innerText =
-total.toFixed(2).replace('.',',');
-
-}
-
-const canvas =
-document.getElementById('assinatura');
-
-const ctx =
-canvas.getContext('2d');
-
-canvas.width =
-canvas.offsetWidth;
-
-canvas.height =
-250;
-
-let desenhando = false;
-
-canvas.addEventListener('mousedown', iniciar);
-canvas.addEventListener('mousemove', desenhar);
-canvas.addEventListener('mouseup', parar);
-
-canvas.addEventListener('touchstart', iniciarTouch);
-canvas.addEventListener('touchmove', desenharTouch);
-canvas.addEventListener('touchend', parar);
-
-function iniciar(e){
-
-desenhando = true;
-
-ctx.beginPath();
-
-ctx.moveTo(
-e.offsetX,
-e.offsetY
-);
-
-}
-
-function desenhar(e){
-
-if(!desenhando) return;
-
-ctx.lineWidth = 2;
-
-ctx.lineCap = 'round';
-
-ctx.lineTo(
-e.offsetX,
-e.offsetY
-);
-
-ctx.stroke();
-
-}
-
-function parar(){
-
-desenhando = false;
-
-}
-
-function iniciarTouch(e){
-
-e.preventDefault();
-
-const rect =
-canvas.getBoundingClientRect();
-
-const touch =
-e.touches[0];
-
-desenhando = true;
-
-ctx.beginPath();
-
-ctx.moveTo(
-touch.clientX - rect.left,
-touch.clientY - rect.top
-);
-
-}
-
-function desenharTouch(e){
-
-e.preventDefault();
-
-if(!desenhando) return;
-
-const rect =
-canvas.getBoundingClientRect();
-
-const touch =
-e.touches[0];
-
-ctx.lineWidth = 2;
-
-ctx.lineCap = 'round';
-
-ctx.lineTo(
-touch.clientX - rect.left,
-touch.clientY - rect.top
-);
-
-ctx.stroke();
-
-}
-
-function limparAssinatura(){
-
-ctx.clearRect(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-}
-
-async function gerarContrato(){
-
-const nome = document.getElementById('nome').value;
-const cpf = document.getElementById('cpf').value;
-const telefone = document.getElementById('telefone').value;
-const endereco = document.getElementById('endereco').value;
-const cidade = document.getElementById('cidade').value;
-const dataEvento = document.getElementById('dataEvento').value;
-
-if(nome.trim() === ''){
-    alert('Preencha o nome do cliente.');
-    return;
-}
-
-let brinquedos = [];
-
-document
-.querySelectorAll('input[type="checkbox"]')
-.forEach(item => {
-
-    if(item.checked){
-
-        const texto =
-        item.parentElement.innerText.trim();
-
-        brinquedos.push(texto);
-
-    }
-
-});
-
-const total =
-document.getElementById('valorTotal').innerText;
-
-const { jsPDF } = window.jspdf;
-
-const pdf = new jsPDF();
-
-pdf.setFontSize(18);
-pdf.text('CONTRATO DE LOCAÇÃO', 20, 20);
-
-pdf.setFontSize(12);
-
-pdf.text('Encanto Kids Infláveis',20,35);
-
-pdf.text(`Cliente: ${nome}`,20,50);
-pdf.text(`CPF: ${cpf}`,20,60);
-pdf.text(`Telefone: ${telefone}`,20,70);
-pdf.text(`Endereço: ${endereco}`,20,80);
-pdf.text(`Cidade: ${cidade}`,20,90);
-pdf.text(`Data do Evento: ${dataEvento}`,20,100);
-
-pdf.text('Brinquedos Locados:',20,120);
-
-let linha = 130;
-
-brinquedos.forEach(item => {
-
-    pdf.text('- ' + item,25,linha);
-
-    linha += 10;
-
-});
-
-pdf.text(`Valor Total: R$ ${total}`,20,linha + 10);
-
-pdf.text(
-'Responsável: Vinicius Gabriel de Souza',
-20,
-linha + 35
-);
-
-pdf.text(
-'Encanto Kids Infláveis',
-20,
-linha + 45
-);
-
-pdf.save(
-`Contrato-${nome}.pdf`
-);
-
-}
-
-const nome =
-document.getElementById('nome').value;
-
-if(nome.trim() === ''){
-
-alert(
-'Preencha o nome do cliente.'
-);
-
-return;
-
-}
-
-alert(
-'✅ Contrato gerado com sucesso!\n\nPróxima versão: PDF e WhatsApp.'
-);
-
-}
-
-</script>
-
-</body>
-</html>
