@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Encanto Kids Infláveis - Login</title>
-
-<link rel="icon" href="favicon.png">
 
 <style>
 
@@ -23,81 +20,76 @@ height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-background:
-linear-gradient(
-135deg,
-#0f1115,
-#171a21,
-#0f1115
-);
-overflow:hidden;
+background:linear-gradient(135deg,#0a0f1f,#111827,#0a0f1f);
 }
 
 .login-box{
-width:450px;
+width:500px;
 padding:50px;
-background:rgba(23,26,33,.98);
-border:1px solid #2a2f3a;
-border-radius:25px;
-box-shadow:
-0 20px 60px rgba(0,0,0,.6);
+background:rgba(15,23,42,0.95);
+border:1px solid rgba(255,255,255,0.1);
+border-radius:30px;
+box-shadow:0 20px 60px rgba(0,0,0,.6);
 }
 
 .logo{
 text-align:center;
-margin-bottom:35px;
+margin-bottom:40px;
 }
 
-.logo h1,
+.logo h1{
+color:#ffffff !important;
+font-size:42px;
+font-weight:800;
+margin-bottom:10px;
+}
+
 .logo p{
-color:white !important;
-}
-
-.logo{
-color:white !important;
+color:#ffffff !important;
+font-size:20px;
+font-weight:400;
 }
 
 label{
 display:block;
-margin-bottom:10px;
-color:white;
+color:#ffffff;
+font-size:18px;
 font-weight:600;
-font-size:16px;
+margin-bottom:10px;
 }
 
 input{
 width:100%;
-padding:15px;
-margin-bottom:20px;
-background:#0f1115;
-border:1px solid #2f3642;
-border-radius:12px;
+padding:16px;
+background:#020617;
+border:1px solid #2563eb;
+border-radius:15px;
 color:white;
-font-size:15px;
+font-size:16px;
+margin-bottom:25px;
 }
 
 input:focus{
 outline:none;
-border-color:#0d6efd;
-box-shadow:0 0 10px rgba(13,110,253,.4);
+box-shadow:0 0 15px rgba(37,99,235,.5);
 }
 
 button{
 width:100%;
-padding:16px;
-background:#0d6efd;
+padding:18px;
 border:none;
-border-radius:12px;
+border-radius:15px;
+background:#2563eb;
 color:white;
-font-size:18px;
+font-size:22px;
 font-weight:bold;
 cursor:pointer;
 transition:.3s;
 }
 
 button:hover{
+background:#1d4ed8;
 transform:translateY(-2px);
-background:#0b5ed7;
 }
 
 .erro{
@@ -108,15 +100,7 @@ font-weight:bold;
 display:none;
 }
 
-.rodape{
-margin-top:30px;
-text-align:center;
-font-size:13px;
-color:#7b8494;
-}
-
 </style>
-
 </head>
 
 <body>
@@ -127,6 +111,7 @@ color:#7b8494;
 <h1>🎈 Encanto Kids Infláveis</h1>
 <p>Painel Administrativo</p>
 </div>
+
 <label>Usuário</label>
 <input
 type="text"
@@ -140,21 +125,11 @@ id="senha"
 placeholder="Digite sua senha">
 
 <button onclick="login()">
-
 Entrar
-
 </button>
 
-<div class="erro" id="erro">
-
+<div id="erro" class="erro">
 Usuário ou senha incorretos.
-
-</div>
-
-<div class="rodape">
-
-Sistema Administrativo © 2026
-
 </div>
 
 </div>
@@ -163,10 +138,10 @@ Sistema Administrativo © 2026
 
 function login(){
 
-const usuario =
+let usuario =
 document.getElementById("usuario").value;
 
-const senha =
+let senha =
 document.getElementById("senha").value;
 
 if(
@@ -185,7 +160,7 @@ window.location.href =
 }else{
 
 document.getElementById("erro")
-.style.display = "block";
+.style.display="block";
 
 }
 
